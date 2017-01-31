@@ -6,11 +6,11 @@
 #include <math.h>
 #include <cassert>
 #include <unordered_map>
-#include "../utilities/utilities.hpp"
-#include "../utilities/prettyprint.hpp"
+#include <unordered_set>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include "../probabilistic/gp.hpp"
+#include "../utilities/utilities.hpp"
 
 namespace boat {
 double normal_lnp(double x, double mean, double variance);

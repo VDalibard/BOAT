@@ -1,6 +1,5 @@
 #include <iostream>
 #include "../utilities/useful_macros.hpp"
-#include "../utilities/utilities.hpp"
 #include "gp.hpp"
 using Eigen::MatrixXd;
 using Eigen::VectorXd;

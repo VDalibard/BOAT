@@ -1,10 +1,10 @@
 #ifndef PROBABILISTIC_T_HPP_INCLUDED
 #define PROBABILISTIC_T_HPP_INCLUDED
-#include "../utilities/useful_macros.hpp"
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <functional>
+#include "../utilities/useful_macros.hpp"
 
 namespace boat {
 extern std::mt19937 generator;

@@ -1,8 +1,6 @@
 #include <limits>
 #include <numeric>
 #include "optimization.hpp"
-
-//These two lines may deserve their own numerical_optimization.cpp file
 #include "numerical_optimization.hpp"
 namespace boat{
 const std::vector<double> EmptyHolder::dummy_;

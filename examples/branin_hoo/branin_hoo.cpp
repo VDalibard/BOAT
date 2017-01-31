@@ -103,10 +103,7 @@ void bo_naive_optim() {
     return res;
   };
   auto learn = [&](const unordered_map<string, double>& r){
-    PR(m.predict(p));
     m.observe(r, p);
-    PR(m.predict(p));
-    //m.print();
   };
   opt.set_subopt_function(subopt);
   opt.set_objective_function(util);
@@ -200,10 +197,7 @@ void bo_struct_optim() {
     return res;
   };
   auto learn = [&](const unordered_map<string, double>& r){
-    PR(m.predict(p));
     m.observe(r, p);
-    PR(m.predict(p));
-    //m.print();
   };
   opt.set_subopt_function(subopt);
   opt.set_objective_function(util);
@@ -255,10 +249,7 @@ void bo_struct_optim_efficient() {
     return res;
   };
   auto learn = [&](const unordered_map<string, double>& r){
-    PR(m.predict(p));
     m.observe(r, p);
-    PR(m.predict(p));
-    //m.print();
   };
   opt.set_subopt_function(subopt);
   opt.set_objective_function(util);
@@ -269,11 +260,6 @@ void bo_struct_optim_efficient() {
 }
 
 int main() {
-  //test_eigen();
-  //test_gp();
-  //PR(expected_improvement(0.0, 1.0, 0.5, true));
-  //TopParameterPtr<BHParams> p;
-  //bayes_optimize(p.deref());
   //bo_naive_optim();
   //bo_struct_optim();
   bo_struct_optim_efficient();

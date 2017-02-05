@@ -126,7 +126,7 @@ struct Distrib {
 };
 
 template <class Child>
-class SemiParametricParticle {
+class SemiParametricModel {
   template <class Particle> friend class SemiParamericEngine;
 public:
   template<class... Args>

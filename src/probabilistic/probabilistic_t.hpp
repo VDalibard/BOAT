@@ -366,24 +366,24 @@ auto average(Func func, int num_particles) {
 //SemiParametricParticle
 
 template <class Child>
-const Child* SemiParametricParticle<Child>::crtp_this() const {
+const Child* SemiParametricModel<Child>::crtp_this() const {
   return static_cast<const Child*>(this);
 }
 
 template <class Child>
-Child* SemiParametricParticle<Child>::crtp_this() {
+Child* SemiParametricModel<Child>::crtp_this() {
   return static_cast<Child*>(this);
 }
 
 template <class Child>
-void SemiParametricParticle<Child>::set_params(GPParams params) {
+void SemiParametricModel<Child>::set_params(GPParams params) {
   default_noise_ = params.default_noise();
   gp_.set_params(std::move(params));
 }
 
 template <class Child>
 template <class... Args>
-double SemiParametricParticle<Child>::predict_mean(const Args&... args) const {
+double SemiParametricModel<Child>::predict_mean(const Args&... args) const {
   double p = crtp_this()->parametric(args...);
   std::vector<double> v = crtp_this()->to_vec(args...);
   return p + gp_.predict_mean(v);
@@ -392,26 +392,26 @@ double SemiParametricParticle<Child>::predict_mean(const Args&... args) const {
 
 template <class Child>
 template <class... Args>
-double SemiParametricParticle<Child>::parametric(const Args&... args) const {
+double SemiParametricModel<Child>::parametric(const Args&... args) const {
  return 0.0;
 }
 
 template <class Child>
 template <class... Args>
-double SemiParametricParticle<Child>::parametric_noise(const Args&... args) const {
+double SemiParametricModel<Child>::parametric_noise(const Args&... args) const {
   return default_noise_;
 }
 
 template <class Child>
 template <class... Args>
-std::vector<double> SemiParametricParticle<Child>::to_vec(const Args&... args) const {
+std::vector<double> SemiParametricModel<Child>::to_vec(const Args&... args) const {
   return {double(args)...};
 }
 
 
 template <class Child>
 template <class... Args>
-GaussianDistrib SemiParametricParticle<Child>::predict_distrib(
+GaussianDistrib SemiParametricModel<Child>::predict_distrib(
     const Args&... args) const {
   double p = crtp_this()->parametric(args...);
   std::vector<double> v = crtp_this()->to_vec(args...);
@@ -422,7 +422,7 @@ GaussianDistrib SemiParametricParticle<Child>::predict_distrib(
 
 template <class Child>
 template <class... Args>
-double SemiParametricParticle<Child>::observe(double result,
+double SemiParametricModel<Child>::observe(double result,
                                              const Args&... args) const {
   double p = crtp_this()->parametric(args...);
   double n = crtp_this()->parametric_noise(args...);

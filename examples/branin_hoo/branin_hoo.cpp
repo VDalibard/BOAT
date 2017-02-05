@@ -4,7 +4,7 @@
 using namespace std;
 
 using boat::ProbEngine;
-using boat::SemiParametricParticle;
+using boat::SemiParametricModel;
 using boat::DAGModel;
 using boat::GPParams;
 using boat::NLOpt;
@@ -46,7 +46,7 @@ double branin_hoo_first_term(const BHParams& p){
 
 
 /// Naive way of optimizing it, model with simple GP prior
-struct Param : public SemiParametricParticle<Param> {
+struct Param : public SemiParametricModel<Param> {
   Param() {
     p_.default_noise(0.0);
     p_.mean(uniform_real_distribution<>(0.0, 10.0)(generator));
@@ -114,8 +114,8 @@ void bo_naive_optim() {
 }
 
 /// Structured way of optimizing it, more accurate model
-struct FirstTermParticle : public SemiParametricParticle<FirstTermParticle> {
-  FirstTermParticle() {
+struct FirstTermModel : public SemiParametricModel<FirstTermModel> {
+  FirstTermModel() {
     alpha_ = uniform_real_distribution<>(0.0, 20.0)(generator);
 
     p_.default_noise(0.0);
@@ -129,13 +129,12 @@ struct FirstTermParticle : public SemiParametricParticle<FirstTermParticle> {
     return alpha_ * cos(x1);
   }
 
-  FirstTermParticle& operator=(const FirstTermParticle&) = default;
   double alpha_;
   GPParams p_;
 };
 
-struct SecondTermParticle : public SemiParametricParticle<SecondTermParticle> {
-  SecondTermParticle() {
+struct SecondTermModel : public SemiParametricModel<SecondTermModel> {
+  SecondTermModel() {
     beta_ = uniform_real_distribution<>(0.0, 20.0)(generator);
 
     p_.default_noise(0.0);
@@ -145,7 +144,6 @@ struct SecondTermParticle : public SemiParametricParticle<SecondTermParticle> {
                       uniform_real_distribution<>(0.0, 15.0)(generator)});
     set_params(p_);
   }
-  SecondTermParticle& operator=(const SecondTermParticle&) = default;
   double parametric(double first_term, double x1, double x2) const {
     return first_term + pow(x2, 2.0) + beta_ * pow(x1, 4.0);
   }
@@ -165,8 +163,8 @@ struct BHModel : public DAGModel<BHModel> {
     double ft = output("first", first_, p.x1_.value());
     output("objective", second_, ft, p.x1_.value(), p.x2_.value());
   }
-  ProbEngine<FirstTermParticle> first_;
-  ProbEngine<SecondTermParticle> second_;
+  ProbEngine<FirstTermModel> first_;
+  ProbEngine<SecondTermModel> second_;
 };
 
 void maximize_ei(BHModel& m, BHParams& p, double incumbent) {

@@ -96,11 +96,11 @@ struct GaussianDistrib {
   }
 };
 
-class GPScalars2 {
+class GP {
   friend class TreedGPS;
   public:
-  GPScalars2();
-  GPScalars2(GPParams params);
+  GP();
+  GP(GPParams params);
   void set_params(GPParams params);
   int num_dims() const;
   double observe(const std::vector<double>& x_new, double y_new);
@@ -163,7 +163,7 @@ class TreedGPS {
   int thresh_dim_;
   double thresh_;
   double inv_ls_along_thresh_dim_;
-  std::unique_ptr<GPScalars2> gp_;
+  std::unique_ptr<GP> gp_;
   std::unique_ptr<TreedGPS> left_;
   std::unique_ptr<TreedGPS> right_;
 };

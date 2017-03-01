@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include "../utilities/useful_macros.hpp"
 #include "gp.hpp"
 using Eigen::MatrixXd;
@@ -46,12 +47,12 @@ MatrixXd matern52(const MatrixXd& x1, const MatrixXd& x2) {
   return res;
 }
 
-int GPScalars2::num_dims() const {
+int GP::num_dims() const {
   assert(!params_.linear_scales().empty());
   return params_.linear_scales().size();
 }
 
-MatrixXd GPScalars2::covariance(const MatrixXd& x1, const MatrixXd& x2) const{
+MatrixXd GP::covariance(const MatrixXd& x1, const MatrixXd& x2) const{
   // Inputs must already be scaled
   static thread_local MatrixXd cov;
   if (params_.kernel() == SQUARED_EXP) {
@@ -65,7 +66,7 @@ MatrixXd GPScalars2::covariance(const MatrixXd& x1, const MatrixXd& x2) const{
   return cov;
 }
 
-void GPScalars2::compute_cholesky() const {
+void GP::compute_cholesky() const {
   int new_size = observed_x_.rows();
   int old_size = covariance_cholesky_.rows();
   if (old_size == new_size) {
@@ -94,7 +95,7 @@ void GPScalars2::compute_cholesky() const {
       .solve(alpha_);
 }
 
-void GPScalars2::compute_cholesky_from_scratch() const{
+void GP::compute_cholesky_from_scratch() const{
   int s = observed_x_.rows();
   MatrixXd covariance_mat = covariance(observed_x_, observed_x_);
   for(int i=0; i<s; i++) {
@@ -107,7 +108,7 @@ void GPScalars2::compute_cholesky_from_scratch() const{
       .solve(alpha_);
 }
 
-double GPScalars2::predict_mean(const std::vector<double>& x_new) const {
+double GP::predict_mean(const std::vector<double>& x_new) const {
   assert(SIZE(x_new) == num_dims());
   if (observed_x_.rows() == 0) {
     return params_.mean();
@@ -121,7 +122,7 @@ double GPScalars2::predict_mean(const std::vector<double>& x_new) const {
   return params_.mean() + mu;
 }
 
-GaussianDistrib GPScalars2::predict_distrib(const std::vector<double>& x_new) const {
+GaussianDistrib GP::predict_distrib(const std::vector<double>& x_new) const {
   if (observed_x_.rows() == 0) {
     return {params_.mean(), params_.amplitude()};
   }
@@ -141,7 +142,7 @@ GaussianDistrib GPScalars2::predict_distrib(const std::vector<double>& x_new) co
   return {params_.mean() + mu, var};
 }
 
-int GPScalars2::at_index(const Eigen::RowVectorXd& v) const {
+int GP::at_index(const Eigen::RowVectorXd& v) const {
   for(int i = 0; i < observed_x_.rows(); i++) {
     if(observed_x_.row(i) == v){
       return i;
@@ -150,7 +151,7 @@ int GPScalars2::at_index(const Eigen::RowVectorXd& v) const {
   return -1;
 }
 
-void GPScalars2::remove_observation(int i) {
+void GP::remove_observation(int i) {
 
   // Now we need to update the Cholesky decomposition
   // The bottom right corner is the tricky one
@@ -191,7 +192,7 @@ void GPScalars2::remove_observation(int i) {
   covariance_cholesky_.conservativeResize(ns, ns);
 }
 
-double GPScalars2::observe_i(const std::vector<double>& x_new, double y_new,
+double GP::observe_i(const std::vector<double>& x_new, double y_new,
                              double noise_var_new){
   GaussianDistrib distrib = predict_distrib(x_new);
   double var = distrib.var_ + noise_var_new;
@@ -237,20 +238,20 @@ double GPScalars2::observe_i(const std::vector<double>& x_new, double y_new,
   return lnp;
 }
 
-double GPScalars2::observe(const std::vector<double>& x_new, double y_new){
+double GP::observe(const std::vector<double>& x_new, double y_new){
   return observe(x_new, y_new, params_.default_noise());
 }
 
-double GPScalars2::observe(const std::vector<double>& x_new, double y_new,
+double GP::observe(const std::vector<double>& x_new, double y_new,
                            double noise){
   return observe_i(x_new, y_new, noise * noise);
 }
 
-GPScalars2::GPScalars2() : GPScalars2(GPParams()) {}
+GP::GP() : GP(GPParams()) {}
 
-GPScalars2::GPScalars2(GPParams params) : params_(std::move(params)) {}
+GP::GP(GPParams params) : params_(std::move(params)) {}
 
-void GPScalars2::set_params(GPParams params) {
+void GP::set_params(GPParams params) {
   assert(observed_x_.rows() == 0);
   params_ = std::move(params);
 }
@@ -262,7 +263,7 @@ TreedGPS::TreedGPS():TreedGPS(GPParams()){}
 TreedGPS::TreedGPS(GPParams params, int observation_thresh, int overlap)
     : observation_thresh_(observation_thresh),
       overlap_(overlap),
-      gp_(make_unique<GPScalars2>(std::move(params))){
+      gp_(make_unique<GP>(std::move(params))){
   assert(overlap_ < observation_thresh_ / 2);
 }
 
@@ -278,7 +279,7 @@ TreedGPS& TreedGPS::operator=(const TreedGPS& other){
   inv_ls_along_thresh_dim_ = other.inv_ls_along_thresh_dim_;
   if(other.gp_){
     assert(!other.right_ && !other.left_);
-    gp_ = make_unique<GPScalars2>(*other.gp_);
+    gp_ = make_unique<GP>(*other.gp_);
   } else {
     assert(other.right_ && other.left_);
     left_ = make_unique<TreedGPS>(*other.left_);
@@ -421,7 +422,7 @@ pair<vector<int>, vector<int>> TreedGPS::compute_thresh_props() {
 }
 
 void TreedGPS::copy_observation(bool s, int i) {
-  GPScalars2& child = s ?  *(right_->gp_) : *(left_->gp_);
+  GP& child = s ?  *(right_->gp_) : *(left_->gp_);
   int ns = child.observed_x_.rows() + 1;
   child.observed_x_.conservativeResize(ns, gp_->num_dims());
   child.observed_y_.conservativeResize(ns);

@@ -4,51 +4,6 @@
 #include <memory>
 namespace boat{
 template <class T>
-ParameterInstance* TopParameterPtr<T>::init_previous() {
-  // Computed before we initialize the parameter
-  assert(computation_type == MAIN);
-  ParameterInstance* previous_instance = ParameterInstance::current_instance;
-  if (previous_instance != nullptr) {
-    previous_instance->set_fixed();
-  }
-  ParameterInstance::current_instance = root_instance_.get();
-
-  return previous_instance;
-}
-
-template <class T>
-template <class... Args>
-TopParameterPtr<T>::TopParameterPtr(Args&&... args)
-    : root_instance_(new ParameterInstance()),
-      previous_instance_(init_previous()),
-      param_(std::make_unique<T>(std::forward<Args>(args)...)) {
-  // Watch out for init_previous above
-}
-
-template <class T>
-void TopParameterPtr<T>::set_previous_instance_current() {
-  // This is true in most parctical cases so leaving it here for debug for now
-  // But should probably be removed
-  assert(ParameterInstance::current_instance == root_instance_.get());
-
-  // Should probably use the latest child,
-  // but again same in most practical cases
-  root_instance_->set_fixed();
-  ParameterInstance::current_instance = previous_instance_;
-}
-
-template <class T>
-TopParameterPtr<T>::~TopParameterPtr() {
-  // This is true in most parctical cases so leaving it here for debug for now
-  // But should probably be removed
-  assert(! root_instance_->has_children());
-
-  if(ParameterInstance::current_instance == root_instance_.get()){
-    ParameterInstance::current_instance = nullptr;
-  }
-}
-
-template <class T>
 const std::unordered_map<ParameterInstance*, T> Parameter<T>::dummy_;
 
 template <class T>

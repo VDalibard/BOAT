@@ -22,8 +22,6 @@ typedef enum { MAIN, PARAMETER } computation_type_t;
 extern computation_type_t computation_type;
 extern ParameterFunction* parameter_function_handler;
 
-template <class T>
-class TopParameterPtr;
 
 typedef boost::coroutines::symmetric_coroutine<void>::call_type
     ParameterCoroutine;
@@ -31,8 +29,6 @@ typedef boost::coroutines::symmetric_coroutine<void>::yield_type YieldCoroutine;
 
 // Main classes
 class ParameterInstance {
-  template <class T>
-  friend class TopParameterPtr;
 
  public:
   ~ParameterInstance();
@@ -84,31 +80,10 @@ class ParameterInstance {
   // Used to know whether all functions have blocked
 };
 
-template <class T>
-class TopParameterPtr {
- public:
-  template <class... Args>
-  TopParameterPtr(Args&&... args);
-  ~TopParameterPtr();
-
-  // Sets the root instance fixed, and the previous instance current
-  void set_previous_instance_current();
-
-  T& deref() { return *param_; }
-
- private:
-  ParameterInstance* init_previous();
-  std::unique_ptr<ParameterInstance> root_instance_;
-  ParameterInstance* previous_instance_;
-  std::unique_ptr<T> param_;
-};
-
 class ParameterSpace {
   friend class ParameterFunction;
   friend class ParameterInterface;
   friend class ParameterInstance;
-  template <class T>
-  friend class TopParameterPtr;
   template <class T>
   friend class ParameterPtr;
   template <class T>

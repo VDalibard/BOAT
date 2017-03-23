@@ -111,9 +111,6 @@ class SemiParamericEngine;
 
 template <class Child>
 class DAGModel;
-// Todo, turn this into a class with multiple fields.
-// Add an expected improvement possibility. When the name of the output is
-// "objective", return the expected improvement rather than an sample.
 
 struct Distrib {
   std::string name_;

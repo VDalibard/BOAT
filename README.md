@@ -1,6 +1,6 @@
 # BOAT: A framework to build bespoke auto-tuners
 
-Most computer systems expose many parameters or flags to users. These flags can be tuned be tuned by users to maximise the system's performance in a particular context. Auto-tuners remove this burden from users. They repeatedly evaluate flag values to find ones with good performance. Unfortunately, traditional auto-tuners often require thousands of iterations to converge. This makes them unsuitable for systems which are expensive to evaluate such as distributed systems.
+Most computer systems expose many parameters or flags to users. These flags can be tuned by users to maximise the system's performance in a particular context. Auto-tuners remove this burden from users. They repeatedly evaluate flag values to find ones with good performance. Unfortunately, traditional auto-tuners often require thousands of iterations to converge. This makes them unsuitable for systems which are expensive to evaluate such as distributed systems.
 
 **BOAT** is a framework to build auto-tuners that are specific to a particular system. This can be done by a system developer who has a good understanding of the underlying system behaviour. BOAT allows them to expose the system's behaviour in the form of a probabilistic model. The resulting auto-tuner will be able to exploit this information and quickly converge to good flag values, typically in tens of iterations.
 

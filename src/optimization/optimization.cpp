@@ -153,6 +153,9 @@ double ugaussian_cdf(double x) {
 
 double expected_improvement(double mean, double var, double best,
                             bool minimizing) {
+  assert(!std::isnan(mean));
+  assert(!std::isnan(var));
+  assert(!std::isnan(best));
   double gamma;
   if(minimizing){
     gamma = best - mean;
@@ -161,7 +164,14 @@ double expected_improvement(double mean, double var, double best,
   }
   gamma /= sqrt(var);
   double sum = gamma * ugaussian_cdf(gamma) + ugaussian_pdf(gamma);
-  return sum * sqrt(var);
+  double res = sum * sqrt(var);
+  if(std::isnan(res)){
+    // var is close to zero
+    return 0.0;
+  } else {
+    return res;
+  }
+  
 }
 
 double exp_imp(double mean, double var, double best,

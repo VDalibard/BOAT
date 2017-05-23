@@ -171,7 +171,6 @@ double expected_improvement(double mean, double var, double best,
   } else {
     return res;
   }
-  
 }
 
 double exp_imp(double mean, double var, double best,

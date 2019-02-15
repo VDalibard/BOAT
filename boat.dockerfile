@@ -15,7 +15,7 @@ RUN git clone https://github.com/eigenteam/eigen-git-mirror
 WORKDIR "/var/tmp/eigen-git-mirror"
 RUN mkdir build
 WORKDIR "/var/tmp/eigen-git-mirror/build"
-RUN cmake ..; make install
+RUN cmake ..; make; make install
 
 # installing dependencies: nlopt
 WORKDIR "/var/tmp"

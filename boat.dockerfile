@@ -7,8 +7,6 @@ RUN apt-get update; apt-get -y install gcc g++ gfortran
 RUN apt-get update; apt-get -y install cmake
 RUN apt-get update; apt-get -y install libblas-dev
 RUN apt-get update; apt-get -y install liblapack-dev
-
-# installing dependencies: boost
 RUN apt-get update; apt-get -y install libboost-dev
 
 # installing dependencies: eigen
@@ -33,6 +31,6 @@ RUN git clone --branch chk_depend https://github.com/alan-turing-institute/BOAT.
 
 WORKDIR "/BOAT/examples/branin_hoo/"
 
-ENV PATH="/opt/gtk/bin:${PATH}"
+ENV PATH="/usr/local/include:${PATH}"
 
 CMD ["make"]

@@ -32,6 +32,7 @@ RUN cmake ..; make; make install
 
 # installing BOAT
 WORKDIR "/"
+
 RUN git clone --branch chk_depend https://github.com/alan-turing-institute/BOAT.git
 RUN mkdir BOAT/build
 
@@ -39,4 +40,4 @@ RUN mkdir BOAT/build
 #RUN cmake ../src; make; make install
 
 WORKDIR "/BOAT/examples/branin_hoo/"
-#CMD ["make"]
+CMD ["make"]

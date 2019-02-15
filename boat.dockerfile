@@ -7,7 +7,7 @@ RUN apt-get update; apt-get -y install gcc g++ gfortran
 RUN apt-get update; apt-get -y install cmake
 RUN apt-get update; apt-get -y install libblas-dev
 RUN apt-get update; apt-get -y install liblapack-dev
-RUN apt-get update; apt-get -y install libboost-dev
+RUN apt-get update; apt-get -y install libboost-all-dev
 
 # installing dependencies: eigen
 WORKDIR "/var/tmp"

@@ -1,5 +1,5 @@
 #include "boat.hpp"
-
+#include <nlopt.h>
 
 using namespace std;
 
@@ -262,4 +262,3 @@ int main() {
   //bo_struct_optim();
   bo_struct_optim_efficient();
 }
-

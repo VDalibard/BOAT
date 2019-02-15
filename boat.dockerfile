@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+#ENV PATH="/usr/local/include:${PATH}"
+
 ### get wget git etc
 RUN apt-get update; apt-get -y install git
 RUN apt-get update; apt-get -y install wget
@@ -28,9 +30,12 @@ RUN cmake ..; make; make install
 # installing BOAT
 WORKDIR "/"
 RUN git clone --branch chk_depend https://github.com/alan-turing-institute/BOAT.git
+RUN mkdir BOAT/build
+WORKDIR "/BOAT/build/"
+RUN cmake ../src; make; make install
 
-WORKDIR "/BOAT/examples/branin_hoo/"
+#WORKDIR "/BOAT/examples/branin_hoo/"
 
-ENV PATH="/usr/local/include:${PATH}"
+
 
 CMD ["make"]

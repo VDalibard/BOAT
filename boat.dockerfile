@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-#ENV PATH="/usr/local/include:${PATH}"
+
 
 ### get wget git etc
 RUN apt-get update; apt-get -y install git
@@ -19,6 +19,8 @@ RUN mkdir build
 WORKDIR "/var/tmp/eigen-git-mirror/build"
 RUN cmake ..; make; make install
 
+ENV PATH="/usr/local/include/eigen3:${PATH}"
+
 # installing dependencies: nlopt
 WORKDIR "/var/tmp"
 RUN git clone git://github.com/stevengj/nlopt
@@ -35,7 +37,4 @@ WORKDIR "/BOAT/build/"
 RUN cmake ../src; make; make install
 
 #WORKDIR "/BOAT/examples/branin_hoo/"
-
-
-
-CMD ["make"]
+#CMD ["make"]

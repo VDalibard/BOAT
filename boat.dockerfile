@@ -7,8 +7,8 @@ RUN apt-get update; apt-get -y install gcc
 RUN apt-get update; apt-get -y install g++
 RUN apt-get update; apt-get -y install gfortran
 RUN apt-get update; apt-get -y install cmake
-RUN apt-get update; apt-get -y libblas-dev
-RUN apt-get update; apt-get -y liblapack-dev
+RUN apt-get update; apt-get -y install libblas-dev
+RUN apt-get update; apt-get -y install liblapack-dev
 
 # installing dependencies: boost
 RUN apt-get update; apt-get -y install libboost-dev

@@ -18,6 +18,7 @@ WORKDIR "/var/tmp/eigen-git-mirror/build"
 RUN cmake ..; make; make install
 
 #ENV PATH="/usr/local/include/eigen3:${PATH}"
+ENV EIGEN_DIR="/usr/local/include/eigen3"
 ENV LD_LIBRARY_PATH="/usr/local/include/eigen3:/usr/local/lib:${LD_LIBRARY_PATH}"
 
 # installing dependencies: nlopt
@@ -35,8 +36,6 @@ RUN git clone --branch chk_depend https://github.com/alan-turing-institute/BOAT.
 RUN mkdir BOAT/build
 WORKDIR "/BOAT/build/"
 RUN cmake ../src; make; make install
-
-
 
 # WORKDIR "/BOAT/examples/branin_hoo/"
 # CMD ["make"]

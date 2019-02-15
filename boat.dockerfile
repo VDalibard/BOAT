@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-
-
 ### get wget git etc
 RUN apt-get update; apt-get -y install git
 RUN apt-get update; apt-get -y install wget
@@ -19,8 +17,8 @@ RUN mkdir build
 WORKDIR "/var/tmp/eigen-git-mirror/build"
 RUN cmake ..; make; make install
 
-ENV PATH="/usr/local/include/eigen3:${PATH}"
-ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
+#ENV PATH="/usr/local/include/eigen3:${PATH}"
+ENV LD_LIBRARY_PATH="/usr/local/include/eigen3:/usr/local/lib:${LD_LIBRARY_PATH}"
 
 # installing dependencies: nlopt
 WORKDIR "/var/tmp"
@@ -35,9 +33,12 @@ WORKDIR "/"
 
 RUN git clone --branch chk_depend https://github.com/alan-turing-institute/BOAT.git
 RUN mkdir BOAT/build
+WORKDIR "/BOAT/build/"
+RUN cmake ../src; make; make install
 
-#WORKDIR "/BOAT/build/"
-#RUN cmake ../src; make; make install
 
-WORKDIR "/BOAT/examples/branin_hoo/"
-CMD ["make"]
+
+# WORKDIR "/BOAT/examples/branin_hoo/"
+# CMD ["make"]
+
+WORKDIR "/"

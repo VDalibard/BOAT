@@ -1,5 +1,4 @@
 #include "boat.hpp"
-#include <nlopt.h>
 
 using namespace std;
 

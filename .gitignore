@@ -1,1 +1,5 @@
+# compiled BOAT
 build/
+
+#examples compiled 
+examples/branin_hoo/branin_hoo

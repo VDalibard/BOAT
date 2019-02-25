@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(BOAT)
 
-set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_CXX_COMPILER g++-8)
 set(CMAKE_CXX_FLAGS "-Wall -fexceptions -std=c++14 -O3 -fopenmp")
 include_directories(SYSTEM $ENV{EIGEN_DIR})
 

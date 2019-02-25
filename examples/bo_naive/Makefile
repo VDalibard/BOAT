@@ -1,4 +1,4 @@
-CC=g++
+CC=g++-8
 CFLAGS=-Wall -fexceptions -std=c++14 -O3 -fopenmp
 BOAT_DIR=./../../
 LIBS= -lboat -lpthread -lblas -lnlopt -lm -lboost_serialization -lboost_system -lboost_coroutine -I $(EIGEN_DIR)

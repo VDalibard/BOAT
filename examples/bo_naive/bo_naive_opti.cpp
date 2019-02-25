@@ -1,5 +1,4 @@
-
-#include "boat.hpp"
+#include "../../include/boat.hpp"
 
 using namespace std;
 
@@ -103,9 +102,6 @@ void bo_naive_optim() {
   opt.run_optimization();
 }
 
-
 int main() {
   bo_naive_optim();
 }
-
-

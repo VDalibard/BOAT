@@ -1,5 +1,16 @@
+.DS_Store
+
+# Visual Studio Code
+.vscode/
+
+# Doxygen
+Doxyfile
+html/
+latex/
+
 # compiled BOAT
 build/
 
 #examples compiled 
 examples/branin_hoo/branin_hoo
+bo_naive_opti
